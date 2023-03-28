@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  vsftpd:
+    build: .
+    ports:
+      - "21:21"
+      - "40000-40100:40000-40100"
+    environment:
+      FTP_USER: your_username
+      FTP_PASS: your_password
+    volumes:
+      - /your/local/folder1:/home/your_username/folder1
+      - /your/local/folder2:/home/your_username/folder2
+    entrypoint: /bin/sh -c "echo $FTP_USER:*:$(id -u):$(id -g):/home/$FTP_USER:/sbin/nologin | adduser -D -H -s /sbin/nologin && echo $FTP_USER:$FTP_PASS | chpasswd && /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf"
